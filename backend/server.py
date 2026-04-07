@@ -106,7 +106,11 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
         # Get session from DB
         session = await db.reasoning_sessions.find_one({"id": session_id}, {"_id": 0})
         if not session:
-            await websocket.send_json({"type": "error", "message": "Session not found"})
+            try:
+                await websocket.send_json({"type": "error", "message": "Session not found"})
+            except:
+                pass
+            manager.disconnect(session_id)
             return
         
         # Update session status
@@ -125,33 +129,36 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
         
         # Callback for step updates
         async def step_callback(event_type: str, data: dict):
-            if event_type == "step_start":
-                await manager.send_message(session_id, {
-                    "type": "step_start",
-                    "data": data
-                })
-            elif event_type == "step_complete":
-                # Save step to database
-                step = ReasoningStep(
-                    step_type=data['type'],
-                    content=data['content'],
-                    tokens_used=data.get('tokens', 0),
-                    latency_ms=data.get('latency_ms', 0),
-                    confidence=data.get('confidence', 0.0)
-                )
-                
-                step_dict = step.model_dump()
-                step_dict['timestamp'] = step_dict['timestamp'].isoformat()
-                
-                await db.reasoning_sessions.update_one(
-                    {"id": session_id},
-                    {"$push": {"steps": step_dict}}
-                )
-                
-                await manager.send_message(session_id, {
-                    "type": "step_complete",
-                    "data": step_dict
-                })
+            try:
+                if event_type == "step_start":
+                    await manager.send_message(session_id, {
+                        "type": "step_start",
+                        "data": data
+                    })
+                elif event_type == "step_complete":
+                    # Save step to database
+                    step = ReasoningStep(
+                        step_type=data['type'],
+                        content=data['content'],
+                        tokens_used=data.get('tokens', 0),
+                        latency_ms=data.get('latency_ms', 0),
+                        confidence=data.get('confidence', 0.0)
+                    )
+                    
+                    step_dict = step.model_dump()
+                    step_dict['timestamp'] = step_dict['timestamp'].isoformat()
+                    
+                    await db.reasoning_sessions.update_one(
+                        {"id": session_id},
+                        {"$push": {"steps": step_dict}}
+                    )
+                    
+                    await manager.send_message(session_id, {
+                        "type": "step_complete",
+                        "data": step_dict
+                    })
+            except Exception as e:
+                logging.error(f"Step callback error: {str(e)}")
         
         # Process query
         result = await engine.process_query(
@@ -181,20 +188,27 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
             "data": result
         })
         
-        # Keep connection open
-        while True:
-            data = await websocket.receive_text()
-            if data == "close":
-                break
+        # Keep connection open to prevent immediate close
+        try:
+            while True:
+                data = await websocket.receive_text()
+                if data == "close":
+                    break
+        except WebSocketDisconnect:
+            pass
     
     except WebSocketDisconnect:
-        manager.disconnect(session_id)
+        logging.info(f"WebSocket disconnected for session {session_id}")
     except Exception as e:
         logging.error(f"WebSocket error: {str(e)}")
-        await manager.send_message(session_id, {
-            "type": "error",
-            "data": {"message": str(e)}
-        })
+        try:
+            await manager.send_message(session_id, {
+                "type": "error",
+                "data": {"message": str(e)}
+            })
+        except:
+            pass
+    finally:
         manager.disconnect(session_id)
 
 

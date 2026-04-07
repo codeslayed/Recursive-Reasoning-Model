@@ -45,6 +45,12 @@ const Dashboard = () => {
       return;
     }
 
+    // Close existing WebSocket if any
+    if (ws) {
+      ws.close();
+      setWs(null);
+    }
+
     try {
       setIsProcessing(true);
       setSteps([]);
@@ -87,9 +93,17 @@ const Dashboard = () => {
           setIsProcessing(false);
           toast.success("Reasoning complete!");
           loadSessions();
+          // Close socket after completion
+          setTimeout(() => {
+            if (socket.readyState === WebSocket.OPEN) {
+              socket.send("close");
+              socket.close();
+            }
+          }, 1000);
         } else if (message.type === "error") {
           toast.error(message.data.message || "An error occurred");
           setIsProcessing(false);
+          socket.close();
         }
       };
 
@@ -99,8 +113,11 @@ const Dashboard = () => {
         setIsProcessing(false);
       };
 
-      socket.onclose = () => {
-        console.log("WebSocket closed");
+      socket.onclose = (event) => {
+        console.log("WebSocket closed", event.code, event.reason);
+        if (isProcessing) {
+          setIsProcessing(false);
+        }
       };
     } catch (error) {
       console.error("Failed to start reasoning:", error);
