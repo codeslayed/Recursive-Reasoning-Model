@@ -1,34 +1,23 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* App-specific styles */
+.reasoning-step-decomposition {
+  border-left: 4px solid #2563eb;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.reasoning-step-reflection {
+  border-left: 4px solid #f59e0b;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.reasoning-step-verification {
+  border-left: 4px solid #ef4444;
 }
 
-.App-link {
-    color: #61dafb;
+.reasoning-step-synthesis {
+  border-left: 4px solid #059669;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.tree-canvas-bg {
+  background-image: url('https://static.prod-images.emergentagent.com/jobs/56115b44-bcc4-4da8-abd1-67ce2ea331af/images/70034b38b80ff97f43dfb51d5195c63ef4bc68ed6469131fa7d3e5cb8bc1efdf.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.9;
 }
