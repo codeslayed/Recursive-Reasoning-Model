@@ -117,10 +117,10 @@ const Dashboard = () => {
       setFinalAnswer(session.final_answer || "");
       setQuery(session.query);
       setMetrics({
-        tokens: session.total_tokens,
-        latency: session.total_latency_ms,
-        depth: session.recursion_depth,
-        confidence: session.steps?.length > 0 ? session.steps[session.steps.length - 1].confidence : 0,
+        tokens: session.total_tokens || 0,
+        latency: session.total_latency_ms || 0,
+        depth: session.recursion_depth || 0,
+        confidence: session.steps?.length > 0 ? session.steps[session.steps.length - 1].confidence || 0 : 0,
       });
     } catch (error) {
       console.error("Failed to load session:", error);
