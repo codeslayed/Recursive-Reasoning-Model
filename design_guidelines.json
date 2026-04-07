@@ -1,0 +1,82 @@
+{
+  "theme": "Light",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "emotional_tone": "Clinical, objective, intelligent, precise, rigid",
+  "colors": {
+    "background": "bg-slate-50",
+    "surface": "bg-white",
+    "surface_alt": "bg-slate-100",
+    "text_primary": "text-slate-900",
+    "text_secondary": "text-slate-600",
+    "border": "border-slate-200",
+    "accents": {
+      "decomposition": "blue-600",
+      "reflection": "amber-500",
+      "verification": "red-500",
+      "synthesis": "emerald-600",
+      "primary": "blue-600",
+      "primary_hover": "blue-700"
+    }
+  },
+  "typography": {
+    "heading_font": "Chivo",
+    "body_font": "IBM Plex Sans",
+    "mono_font": "JetBrains Mono",
+    "hierarchy": {
+      "h1": "text-2xl sm:text-3xl font-black tracking-tighter",
+      "h2": "text-xl sm:text-2xl font-bold tracking-tight",
+      "h3": "text-lg sm:text-xl font-semibold tracking-tight",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm text-slate-600",
+      "mono": "text-xs font-mono tracking-tight"
+    }
+  },
+  "layout_and_spacing": {
+    "strategy": "The 'Control Room' Grid",
+    "sidebar": "w-64 border-r border-slate-200 bg-white flex flex-col h-screen fixed left-0 top-0 z-20",
+    "main_content": "ml-64 flex flex-col h-screen overflow-hidden bg-slate-50",
+    "header": "h-16 border-b border-slate-200 bg-white px-6 flex items-center justify-between shrink-0 z-10",
+    "workspace": "flex-1 flex overflow-hidden",
+    "left_panel": "w-1/3 min-w-[350px] max-w-[500px] border-r border-slate-200 bg-white overflow-y-auto p-6 flex flex-col gap-4",
+    "right_panel": "flex-1 relative bg-slate-50 overflow-hidden flex flex-col",
+    "metrics_strip": "grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border-b border-slate-200",
+    "metrics_item": "bg-white p-4 flex flex-col gap-1",
+    "padding": "Generous internal padding (p-4 to p-6) within cards, tight gaps (gap-4) between structural elements.",
+    "border_radius": "rounded-none or rounded-sm (max 4px)"
+  },
+  "components": {
+    "cards": "Flat design, bg-white, 1px solid border-slate-200, no shadow. Active state: border-blue-600 shadow-sm.",
+    "buttons": "Square or rounded-sm corners. Primary: bg-blue-600 text-white hover:bg-blue-700. Secondary: bg-white border border-slate-200 text-slate-900 hover:bg-slate-50.",
+    "inputs": "Flat, 1px border-slate-200, focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 rounded-sm.",
+    "badges": "Small uppercase tracking-wider font-mono text-[10px] px-2 py-0.5 rounded-sm. Colored based on reasoning stage.",
+    "reasoning_log_item": "Collapsible accordion (Shadcn Accordion) or custom expanding card. Left border color-coded to the reasoning stage. Contains mono-spaced metadata (tokens, ms).",
+    "tree_visualization": "A custom SVG or Flexbox/Grid-based node tree canvas, or reactflow. Nodes are connected via lines. Nodes represent Decomposition, Reflection, Verification, Synthesis. Use the provided canvas_empty_bg for the background of the tree container to give it an architectural feel."
+  },
+  "motion_and_interactions": {
+    "transitions": "Snappy and quick. duration-150 ease-out.",
+    "hover_states": "Subtle background shifts (bg-slate-50) and border color changes.",
+    "loading_states": "Use 'Tracing Beam' effect for active reasoning steps (e.g., a pulsing left border).",
+    "accessibility": "Focus rings must be high contrast (blue-600)."
+  },
+  "icons_and_assets": {
+    "icon_library": "lucide-react",
+    "images": {
+      "canvas_empty_bg": {
+        "url": "https://static.prod-images.emergentagent.com/jobs/56115b44-bcc4-4da8-abd1-67ce2ea331af/images/70034b38b80ff97f43dfb51d5195c63ef4bc68ed6469131fa7d3e5cb8bc1efdf.png",
+        "description": "Subtle, minimalist abstract background representing artificial intelligence reasoning. Clean Swiss design style. Light gray and white, very faint grid lines. Use as the background for the right panel 'Tree/Graph Visualization' container with bg-[url(...)] bg-cover or bg-repeat. Apply a subtle opacity if needed.",
+        "category": "background"
+      }
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install specific fonts via Google Fonts or npm (e.g., @fontsource/chivo, @fontsource/ibm-plex-sans, @fontsource/jetbrains-mono). Add them to tailwind.config.js.",
+    "Ensure 'data-testid' attributes are added to ALL interactive elements (buttons, inputs, accordions, tree nodes) to support robust testing.",
+    "Implement the Layout: Sidebar (History) -> Main Content (Header -> Metrics Strip -> Split View: Left Logs, Right Tree).",
+    "Use Shadcn UI where applicable (Accordion, Badge, Button, Input, Card, ScrollArea, Separator). CRITICAL: override border radii to be `rounded-sm` or `rounded-none` and remove shadows to match the Swiss High-Contrast archetype.",
+    "The metrics strip should use a 'Grid Borders' approach: a parent container with a dark background (bg-slate-200) acting as a 1px gap, containing items with a white background to create crisp 1px borders between them.",
+    "Implement the 'Live Reasoning Steps Panel' on the left side of the workspace. Each step should be visually distinct using left-border colors (Blue for Decomposition, Amber for Reflection, Red for Verification, Emerald for Synthesis). Use Monospace font for metadata (latency, tokens).",
+    "The right panel 'Tree/Graph Visualization' should either use a lightweight library like reactflow or a custom React component rendering nodes with SVG lines connecting them. The background of this panel MUST use the provided `canvas_empty_bg` image to give it an architectural blueprint feel.",
+    "Never use `Inter` for headings. Use `Chivo`.",
+    "Never use generic gradients. Keep colors flat, high-contrast, and strictly functional."
+  ]
+}
