@@ -67,8 +67,6 @@ This prototype showcases how a lightweight LLM (GPT-4o-mini) can solve complex q
    - Click to reload previous sessions
    - Status tracking (pending/processing/completed)
 
-## 🎓 For College Presentation
-
 ### Innovation Highlight
 "This prototype demonstrates a **reasoning orchestration framework** that enables lightweight language models to solve complex queries through recursive task decomposition, self-reflection, and iterative refinement - improving output quality without requiring larger models or additional training."
 
@@ -145,5 +143,4 @@ This prototype showcases how a lightweight LLM (GPT-4o-mini) can solve complex q
 **MVP Complete** - All core features implemented and tested. Ready for college demonstration and presentation.
 
 ---
-
-**Built with Emergent** | Recursive Reasoning Framework v1.0
+Recursive Reasoning Framework v1.0
